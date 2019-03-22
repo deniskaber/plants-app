@@ -1,0 +1,10 @@
+.DS_Store
+.idea
+build
+node_modules/
+npm-debug*
+package-lock.json
+yarn-debug*
+yarn-error*
+.gradle
+.env
