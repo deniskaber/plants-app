@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator, createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {AddPlantScreen} from '../screens/AddPlantScreen';
+import AddPlantScreen from '../screens/PlantsDictionaryScreen';
 import {AuthLoadingScreen} from '../screens/AuthLoadingScreen';
 import {SignInScreen} from '../screens/SignInScreen';
 import {TourScreen} from '../screens/TourScreen';
@@ -21,7 +21,7 @@ export default createAppContainer(
             Auth: AuthStack,
         },
         {
-            initialRouteName: 'AuthLoading',
+            initialRouteName: 'Main',
         },
     ),
 );

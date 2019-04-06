@@ -27,20 +27,43 @@ const connection = mysql.createConnection({
     database: process.env.DB_NAME,
 });
 
+connection.connect();
+
+app.use('/', (req, res, next) => {
+    res.set({
+        'Access-Control-Allow-Origin': '*',
+    });
+
+    next();
+});
+
 app.use('/plants', (req, res, next) => {
-    connection.connect();
 
     connection.query(
         `SELECT ID, BOTANICAL_NAME, NAME, LIGHT, TEMPERATURE, HUMIDITY, WATERING, SOIL
         FROM plants.plants;`,
         (error, results, fields) => {
-            if (error) throw error;
+            if (error) {
+                // connection.end();
+                throw error;
+            }
 
-            res.json(results);
+            const mappedResults = results.map((row) => ({
+                id: row.ID,
+                botanicalName: row.BOTANICAL_NAME,
+                name: row.NAME,
+                light: row.LIGHT,
+                temperature: row.TEMPERATURE,
+                humidity: row.HUMIDITY,
+                watering: row.WATERING,
+                soil: row.SOIL,
+            }));
+
+            res.json(mappedResults);
+
+            // connection.end();
         },
     );
-
-    connection.end();
 });
 
 app.listen(port, () => console.log(`Server is listening on port ${port}!`));

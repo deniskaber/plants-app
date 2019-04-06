@@ -1,26 +1,35 @@
 import React from 'react';
 import {Button, Image, Platform, FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Icon, WebBrowser} from 'expo';
+import {connect} from 'react-redux';
 
 import {MonoText} from '../components/StyledText';
 import Colors from '../constants/Colors';
 
-export default class HomeScreen extends React.Component {
-    static navigationOptions = {
-        headerTitle: 'Мои растения',
-        headerRight: (
-            <TouchableOpacity>
-                <Icon.Ionicons
-                    name={Platform.OS === 'ios' ? 'ios-add-circle-outline' : 'md-add-circle-outline'}
-                    size={26}
-                    style={{marginBottom: -3}}
-                />
-            </TouchableOpacity>
-        ),
-    };
-
+class UserPlantsListScreen extends React.Component {
     _onPress = (item) => {
         this.props.navigation.navigate('PlantDetails', {id: item.key});
+    };
+
+    renderListHeader = () => {
+        return (
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text
+                    style={{
+                        fontSize: 24,
+                    }}
+                >
+                    Ваши растения
+                </Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('AddPlant')}>
+                    <Icon.Ionicons
+                        name={Platform.OS === 'ios' ? 'ios-add-circle-outline' : 'md-add-circle-outline'}
+                        size={26}
+                        style={{marginBottom: -3}}
+                    />
+                </TouchableOpacity>
+            </View>
+        );
     };
 
     renderItem = (item) => {
@@ -34,13 +43,21 @@ export default class HomeScreen extends React.Component {
                         borderRadius: 10,
                         height: 100,
                         padding: 20,
-                        margin: 20,
+                        marginVertical: 20,
                     }}
                 >
-                        <Text style={{fontWeight: 'bold'}}>{name}</Text>
-                        <Text>{botanicalName}</Text>
+                    <Text style={{fontWeight: 'bold'}}>{name}</Text>
+                    <Text>{botanicalName}</Text>
                 </View>
             </TouchableOpacity>
+        );
+    };
+
+    renderListEmpty = () => {
+        return (
+            <View>
+                <Text>Пока ничего нет</Text>
+            </View>
         );
     };
 
@@ -48,55 +65,25 @@ export default class HomeScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={[
-                        {key: '1', name: 'Flowering Maple', botanicalName: 'Abutilon hybridum'},
-                        {key: '2', name: 'Chenile Plant', botanicalName: 'Acalypha hispida'},
-                        {key: '3', name: 'Magic Flower', botanicalName: 'Achimenes hybrids'},
-                    ]}
+                    data={this.props.usersPlants}
+                    ListHeaderComponent={this.renderListHeader}
+                    ListEmptyComponent={this.renderListEmpty}
                     renderItem={({item}) => this.renderItem(item)}
                 />
             </View>
         );
     }
-
-    _maybeRenderDevelopmentModeWarning() {
-        if (__DEV__) {
-            const learnMoreButton = (
-                <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-                    Learn more
-                </Text>
-            );
-
-            return (
-                <Text style={styles.developmentModeText}>
-                    Development mode is enabled, your app will be slower but you can use useful development tools.{' '}
-                    {learnMoreButton}
-                </Text>
-            );
-        } else {
-            return (
-                <Text style={styles.developmentModeText}>
-                    You are not in development mode, your app will run at full speed.
-                </Text>
-            );
-        }
-    }
-
-    _handleLearnMorePress = () => {
-        WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-    };
-
-    _handleHelpPress = () => {
-        WebBrowser.openBrowserAsync(
-            'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes',
-        );
-    };
 }
+
+export default connect((state) => ({
+    usersPlants: state.usersPlants,
+}))(UserPlantsListScreen);
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        paddingHorizontal: 20,
     },
     developmentModeText: {
         marginBottom: 20,

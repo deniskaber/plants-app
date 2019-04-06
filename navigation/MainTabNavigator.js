@@ -3,14 +3,22 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
+import PlantsDictionaryScreen from '../screens/PlantsDictionaryScreen';
+import AddPlantDetailsScreen from '../screens/AddPlantDetailsScreen';
+import AddPlantWateringScreen from '../screens/AddPlantWateringScreen';
+import AddPlantAdditionalDetailsScreen from '../screens/AddPlantAdditionalDetailsScreen';
+import UserPlantsListScreen from '../screens/UserPlantsListScreen';
 import LinksScreen from '../screens/LinksScreen';
 import {PlantDetailsScreen} from '../screens/PlantDetailsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const HomeStack = createStackNavigator({
-    Home: HomeScreen,
+    Home: UserPlantsListScreen,
     PlantDetails: PlantDetailsScreen,
+    AddPlant: PlantsDictionaryScreen,
+    AddPlantDetails: AddPlantDetailsScreen,
+    AddPlantWatering: AddPlantWateringScreen,
+    AddPlantAdditionalDetails: AddPlantAdditionalDetailsScreen,
 });
 
 HomeStack.navigationOptions = {
