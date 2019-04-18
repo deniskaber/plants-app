@@ -3,9 +3,9 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {AppLoading, Asset, Font, Icon} from 'expo';
-import {fetchPlantsDictionary} from './config/actions';
+import {fetchPlantsDictionary} from './state/actions';
 import AppNavigator from './navigation/AppNavigator';
-import configureStore from './config/configureStore';
+import configureStore from './state/configureStore';
 
 const {store, persistor} = configureStore();
 
@@ -47,7 +47,9 @@ export default class App extends React.Component {
                 ...Icon.Ionicons.font,
                 // We include SpaceMono because we use it in HomeScreen.js. Feel free
                 // to remove this if you are not using it in your app
-                'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+                'firaSans-Bold': require('./assets/fonts/FiraSans-Bold.ttf'),
+                'firaSans-Light': require('./assets/fonts/FiraSans-Light.ttf'),
+                'firaSans-Regular': require('./assets/fonts/FiraSans-Regular.ttf'),
             }),
             loadDataPromise,
         ]);

@@ -1,76 +1,82 @@
 import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
+import CalendarIcon from '../components/icons/CalendarIcon';
+import PlantsIcon from '../components/icons/PlantsIcon';
+import SettingsIcon from '../components/icons/SettingsIcon';
 
-import TabBarIcon from '../components/TabBarIcon';
+import Colors from '../constants/Colors';
+import PlantAdditionalDetailsScreen from '../screens/PlantAdditionalDetailsScreen';
 import PlantsDictionaryScreen from '../screens/PlantsDictionaryScreen';
 import AddPlantDetailsScreen from '../screens/AddPlantDetailsScreen';
 import AddPlantWateringScreen from '../screens/AddPlantWateringScreen';
 import AddPlantAdditionalDetailsScreen from '../screens/AddPlantAdditionalDetailsScreen';
 import UserPlantsListScreen from '../screens/UserPlantsListScreen';
 import LinksScreen from '../screens/LinksScreen';
-import {PlantDetailsScreen} from '../screens/PlantDetailsScreen';
+import PlantDetailsScreen from '../screens/PlantDetailsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const HomeStack = createStackNavigator({
     Home: UserPlantsListScreen,
     PlantDetails: PlantDetailsScreen,
+    PlantAdditionalDetails: PlantAdditionalDetailsScreen,
     AddPlant: PlantsDictionaryScreen,
     AddPlantDetails: AddPlantDetailsScreen,
     AddPlantWatering: AddPlantWateringScreen,
     AddPlantAdditionalDetails: AddPlantAdditionalDetailsScreen,
 });
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Plants',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? 'ios-leaf'
-          : 'md-leaf'
-      }
-    />
-  ),
+const getPlantsTabBarIcon = ({focused}) => (
+    <PlantsIcon fill={focused ? Colors.tabIconSelected : Colors.tabIconDefault} />
+);
+
+HomeStack.navigationOptions = ({navigation}) => {
+    let tabBarVisible = true;
+
+    let routeName = navigation.state.routes[navigation.state.index].routeName;
+
+    if (routeName !== 'Home') {
+        tabBarVisible = false;
+    }
+
+    return {
+        tabBarVisible,
+        tabBarIcon: getPlantsTabBarIcon,
+    };
 };
 
 const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+    Links: LinksScreen,
 });
 
 LinksStack.navigationOptions = {
-  tabBarLabel: 'Calendar',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-calendar' : 'md-calendar'}
-    />
-  ),
+    tabBarIcon: ({focused}) => <CalendarIcon fill={focused ? Colors.tabIconSelected : Colors.tabIconDefault} />,
 };
 
 const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+    Settings: SettingsScreen,
 });
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Profile',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  ),
+    tabBarIcon: ({focused}) => <SettingsIcon fill={focused ? Colors.tabIconSelected : Colors.tabIconDefault} />,
 };
 
-export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
-}, {
-    tabBarOptions: {
-        style: {
-            backgroundColor: '#c8c8c8'
-        }
-    }
-});
+export default createBottomTabNavigator(
+    {
+        HomeStack,
+        LinksStack,
+        SettingsStack,
+    },
+    {
+        tabBarOptions: {
+            showLabel: false,
+            style: {
+                borderTopWidth: 0,
+                height: 64,
+                backgroundColor: '#fff',
+                shadowColor: '#000',
+                shadowOpacity: 0.08,
+                shadowRadius: 8,
+            },
+        },
+    },
+);

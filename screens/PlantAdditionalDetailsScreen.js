@@ -1,10 +1,9 @@
-import nanoid from 'nanoid';
 import React from 'react';
-import {Alert, Button, Text, TextInput, View} from 'react-native';
+import {Button, Text, TextInput, View} from 'react-native';
 import {connect} from 'react-redux';
-import {addUserPlant} from '../state/actions';
+import {editUserPlant} from '../state/actions';
 
-class AddPlantAdditionalDetailsScreen extends React.Component {
+class PlantAdditionalDetailsScreen extends React.Component {
     constructor(props) {
         super(props);
 
@@ -13,19 +12,17 @@ class AddPlantAdditionalDetailsScreen extends React.Component {
         };
     }
 
-    handlePressAddPlant = () => {
-        const {plant, addUserPlant} = this.props;
+    handlePressSubmit = () => {
+        const {plant, editUserPlant} = this.props;
         const {userDefinedPlantName} = this.state;
 
         // TODO add plant name validation
 
-        addUserPlant({
+        editUserPlant(plant.id, {
             name: userDefinedPlantName.trim(),
-            plantId: plant.id,
-            id: nanoid(),
         });
 
-        this.props.navigation.navigate('Home');
+        // this.props.navigation.navigate('Home');
     };
 
     handleChangePlantNameInput = (text) => this.setState({userDefinedPlantName: text});
@@ -39,7 +36,7 @@ class AddPlantAdditionalDetailsScreen extends React.Component {
                     onChangeText={this.handleChangePlantNameInput}
                     value={this.state.userDefinedPlantName}
                 />
-                <Button title="Применить" onPress={this.handlePressAddPlant} />
+                <Button title="Применить" onPress={this.handlePressSubmit} />
             </View>
         );
     }
@@ -49,13 +46,13 @@ const mapStateToProps = (state, ownProps) => {
     const plantId = ownProps.navigation.getParam('id');
 
     return {
-        plant: state.plants.find(({id}) => id === plantId),
+        plant: state.usersPlants.find(({id}) => id === plantId),
     };
 };
 
-const mapDispatchToProps = {addUserPlant};
+const mapDispatchToProps = {editUserPlant};
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(AddPlantAdditionalDetailsScreen);
+)(PlantAdditionalDetailsScreen);

@@ -1,4 +1,3 @@
-import nanoid from 'nanoid';
 import globalConfig from './globalConfig';
 
 export const PLANTS_DICTIONARY_ACTIONS = {
@@ -10,6 +9,7 @@ export const PLANTS_DICTIONARY_ACTIONS = {
 export const USER_PLANTS_ACTIONS = {
     ADD_PLANT: 'ADD_PLANT',
     EDIT_PLANT: 'EDIT_PLANT',
+    DELETE_PLANT: 'DELETE_PLANT',
 };
 
 const loadPlantsDictionary = () => ({
@@ -51,8 +51,18 @@ export const fetchPlantsDictionary = () => {
 
 export const addUserPlant = (plantDetails) => ({
     type: USER_PLANTS_ACTIONS.ADD_PLANT,
+    payload: plantDetails,
+});
+
+export const editUserPlant = (plantId, plantDetails) => ({
+    type: USER_PLANTS_ACTIONS.EDIT_PLANT,
     payload: {
-        ...plantDetails,
-        id: nanoid(),
+        id: plantId,
+        updatedDetails: plantDetails,
     },
+});
+
+export const deleteUserPlant = (plantId) => ({
+    type: USER_PLANTS_ACTIONS.DELETE_PLANT,
+    payload: plantId,
 });

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 // const session = require('express-session');
 // const RedisStore = require('connect-redis')(session);
 
@@ -65,5 +66,7 @@ app.use('/plants', (req, res, next) => {
         },
     );
 });
+
+app.use(express.static('public'));
 
 app.listen(port, () => console.log(`Server is listening on port ${port}!`));
