@@ -27,7 +27,7 @@ class PlantsDictionaryScreen extends React.Component {
                 </Text>
                 <TextInput
                     style={{height: 40, backgroundColor: '#f1f1f2'}}
-                    placeholder="Введите название"
+                    placeholder="Введите название растения"
                     onChangeText={(text) => this.setState({plantNameFilter: text})}
                     value={this.state.plantNameFilter}
                 />
@@ -68,6 +68,7 @@ class PlantsDictionaryScreen extends React.Component {
             <View
                 style={{
                     paddingHorizontal: 20,
+                    flex: 1,
                 }}
             >
                 <FlatList

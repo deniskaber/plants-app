@@ -6,7 +6,7 @@ import PlantListCard from '../components/PlantListCard';
 
 class UserPlantsListScreen extends React.Component {
     static navigationOptions = {
-        // headerBackTitle: null,
+        headerBackTitle: null,
         headerStyle: {
             borderBottomWidth: 0,
         },

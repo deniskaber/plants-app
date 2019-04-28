@@ -1,6 +1,8 @@
 import React from 'react';
-import {Button, Text, TextInput, View} from 'react-native';
+import {TextInput, Image} from 'react-native';
 import {connect} from 'react-redux';
+import {ScreenViewContainer} from '../components/ScreenView';
+import {ScreenTitleText} from '../components/StyledText';
 import {editUserPlant} from '../state/actions';
 
 class PlantAdditionalDetailsScreen extends React.Component {
@@ -12,7 +14,7 @@ class PlantAdditionalDetailsScreen extends React.Component {
         };
     }
 
-    handlePressSubmit = () => {
+    handleNameSubmit = (nativeEvent) => {
         const {plant, editUserPlant} = this.props;
         const {userDefinedPlantName} = this.state;
 
@@ -21,23 +23,31 @@ class PlantAdditionalDetailsScreen extends React.Component {
         editUserPlant(plant.id, {
             name: userDefinedPlantName.trim(),
         });
-
-        // this.props.navigation.navigate('Home');
     };
 
     handleChangePlantNameInput = (text) => this.setState({userDefinedPlantName: text});
 
+    renderPlantImageControl() {
+        return (
+            <Image
+                style={{width: 50, height: 50}}
+                source={{uri: 'http://localhost:3000/static/images/test_image_2.jpg'}}
+            />
+        );
+    }
+
     render() {
         return (
-            <View>
-                <Text>Дополнительная инфа</Text>
+            <ScreenViewContainer>
+                <ScreenTitleText>Дополнительная инфа</ScreenTitleText>
+                {this.renderPlantImageControl()}
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                    onChangeText={this.handleChangePlantNameInput}
                     value={this.state.userDefinedPlantName}
+                    onChangeText={this.handleChangePlantNameInput}
+                    onSubmitEditing={this.handleNameSubmit}
                 />
-                <Button title="Применить" onPress={this.handlePressSubmit} />
-            </View>
+            </ScreenViewContainer>
         );
     }
 }

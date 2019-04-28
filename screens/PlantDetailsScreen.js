@@ -1,6 +1,17 @@
 import React from 'react';
-import {ActionSheetIOS, Alert, Button, ImageBackground, StyleSheet, ScrollView, Text, View} from 'react-native';
+import {
+    ActionSheetIOS,
+    Alert,
+    TouchableOpacity,
+    ImageBackground,
+    StyleSheet,
+    ScrollView,
+    Text,
+    View,
+} from 'react-native';
+import {Icon} from 'expo';
 import {connect} from 'react-redux';
+import PlatformIcon from '../components/PlatformIcon';
 import Colors from '../constants/Colors';
 import {deleteUserPlant} from '../state/actions';
 
@@ -11,7 +22,11 @@ class PlantDetailsScreen extends React.Component {
         headerStyle: {
             borderBottomWidth: 0,
         },
-        headerRight: <Button onPress={navigation.getParam('handleActionEdit')} title="Edit" color={Colors.textColor} />,
+        headerRight: (
+            <TouchableOpacity onPress={navigation.getParam('handleActionEdit')}>
+                <PlatformIcon name="settings" style={styles.headerRightIcon} />
+            </TouchableOpacity>
+        ),
     });
 
     componentDidMount() {
@@ -19,27 +34,29 @@ class PlantDetailsScreen extends React.Component {
     }
 
     _handleActionEdit = () => {
-        ActionSheetIOS.showActionSheetWithOptions(
-            {
-                options: ['Edit', 'Cancel', 'Remove'],
-                destructiveButtonIndex: 2,
-                cancelButtonIndex: 1,
-            },
-            (buttonIndex) => {
-                if (buttonIndex === 0) {
-                    this.props.navigation.navigate('PlantAdditionalDetails', {id: this.props.plant.id});
-                } else if (buttonIndex === 2) {
-                    Alert.alert('Удалить это растение', 'Вы уверены?', [
-                        {
-                            text: 'Да',
-                            onPress: this.handleRemovePlant,
-                            style: 'cancel',
-                        },
-                        {text: 'Нет'},
-                    ]);
-                }
-            },
-        );
+        this.props.navigation.navigate('PlantAdditionalDetails', {id: this.props.plant.id});
+
+        // ActionSheetIOS.showActionSheetWithOptions(
+        //     {
+        //         options: ['Edit', 'Cancel', 'Remove'],
+        //         destructiveButtonIndex: 2,
+        //         cancelButtonIndex: 1,
+        //     },
+        //     (buttonIndex) => {
+        //         if (buttonIndex === 0) {
+        //             this.props.navigation.navigate('PlantAdditionalDetails', {id: this.props.plant.id});
+        //         } else if (buttonIndex === 2) {
+        //             Alert.alert('Удалить это растение', 'Вы уверены?', [
+        //                 {
+        //                     text: 'Да',
+        //                     onPress: this.handleRemovePlant,
+        //                     style: 'cancel',
+        //                 },
+        //                 {text: 'Нет'},
+        //             ]);
+        //         }
+        //     },
+        // );
     };
 
     handleRemovePlant = () => {
@@ -56,8 +73,9 @@ class PlantDetailsScreen extends React.Component {
         }
 
         return (
+            // TODO refactor this to valid URL
             <ImageBackground
-                source={{uri: 'http://localhost:3000/images/test_image_2.jpg'}}
+                source={{uri: 'http://localhost:3000/static/images/test_image_2.jpg'}}
                 style={{width: '100%', height: '100%'}}
             >
                 <ScrollView style={styles.container}>
@@ -113,6 +131,9 @@ const styles = StyleSheet.create({
         fontFamily: 'firaSans-Light',
         fontSize: 14,
         lineHeight: 20,
+    },
+    headerRightIcon: {
+        marginRight: 10,
     },
     titleContainer: {
         color: Colors.mainColor,
