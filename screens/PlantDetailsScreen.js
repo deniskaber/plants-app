@@ -1,19 +1,8 @@
 import React from 'react';
-import {
-    ActionSheetIOS,
-    Alert,
-    TouchableOpacity,
-    ImageBackground,
-    StyleSheet,
-    ScrollView,
-    Text,
-    View,
-} from 'react-native';
-import {Icon} from 'expo';
+import {Button, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import PlatformIcon from '../components/PlatformIcon';
 import Colors from '../constants/Colors';
-import {deleteUserPlant} from '../state/actions';
 
 class PlantDetailsScreen extends React.Component {
     static navigationOptions = ({navigation}) => ({
@@ -35,33 +24,11 @@ class PlantDetailsScreen extends React.Component {
 
     _handleActionEdit = () => {
         this.props.navigation.navigate('PlantAdditionalDetails', {id: this.props.plant.id});
-
-        // ActionSheetIOS.showActionSheetWithOptions(
-        //     {
-        //         options: ['Edit', 'Cancel', 'Remove'],
-        //         destructiveButtonIndex: 2,
-        //         cancelButtonIndex: 1,
-        //     },
-        //     (buttonIndex) => {
-        //         if (buttonIndex === 0) {
-        //             this.props.navigation.navigate('PlantAdditionalDetails', {id: this.props.plant.id});
-        //         } else if (buttonIndex === 2) {
-        //             Alert.alert('Удалить это растение', 'Вы уверены?', [
-        //                 {
-        //                     text: 'Да',
-        //                     onPress: this.handleRemovePlant,
-        //                     style: 'cancel',
-        //                 },
-        //                 {text: 'Нет'},
-        //             ]);
-        //         }
-        //     },
-        // );
     };
 
-    handleRemovePlant = () => {
-        this.props.deleteUserPlant(this.props.plant.id);
-    };
+    handlePressSetNotificationsButton = () => {
+        this.props.navigation.navigate('PlantWateringSettings', {id: this.props.plant.id});
+    }
 
     render() {
         const {plant} = this.props;
@@ -73,11 +40,7 @@ class PlantDetailsScreen extends React.Component {
         }
 
         return (
-            // TODO refactor this to valid URL
-            <ImageBackground
-                source={{uri: 'http://localhost:3000/static/images/test_image_2.jpg'}}
-                style={{width: '100%', height: '100%'}}
-            >
+            <ImageBackground source={{uri: plant.imageURI}} style={{width: '100%', height: '100%'}}>
                 <ScrollView style={styles.container}>
                     <View style={styles.titleContainer}>
                         <Text style={styles.titleText}>{plant.name}</Text>
@@ -85,17 +48,22 @@ class PlantDetailsScreen extends React.Component {
                     </View>
 
                     <View style={styles.scheduleCardContainer}>
-                        <View>
-                            <Text style={styles.scheduleCardHeader}>3 дня</Text>
-                            <Text>Полив</Text>
+                        <View style={styles.scheduleBlock}>
+                            <View>
+                                <Text style={styles.scheduleCardHeader}>3 дня</Text>
+                                <Text>Полив</Text>
+                            </View>
+                            <View>
+                                <Text style={styles.scheduleCardHeader}>3 недели</Text>
+                                <Text>Удобрение</Text>
+                            </View>
+                            <View>
+                                <Text style={styles.scheduleCardHeader}>Месяц</Text>
+                                <Text>Пересадка</Text>
+                            </View>
                         </View>
                         <View>
-                            <Text style={styles.scheduleCardHeader}>3 недели</Text>
-                            <Text>Удобрение</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.scheduleCardHeader}>Месяц</Text>
-                            <Text>Пересадка</Text>
+                            <Button title="Настроить график полива" onPress={this.handlePressSetNotificationsButton} />
                         </View>
                     </View>
 
@@ -152,13 +120,14 @@ const styles = StyleSheet.create({
         color: Colors.mainColor,
     },
     scheduleCardContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         marginVertical: 8,
         backgroundColor: Colors.cardBackground,
         padding: 24,
         borderRadius: 12,
-        height: 88,
+    },
+    scheduleBlock: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     scheduleCardHeader: {
         fontFamily: 'firaSans-Bold',
@@ -188,9 +157,4 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = {deleteUserPlant};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(PlantDetailsScreen);
+export default connect(mapStateToProps)(PlantDetailsScreen);

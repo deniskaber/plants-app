@@ -1,4 +1,4 @@
-import nanoid from 'nanoid';
+import nanoid from 'nanoid/non-secure';
 import React from 'react';
 import {Alert, Button, Text, TextInput, View} from 'react-native';
 import {connect} from 'react-redux';

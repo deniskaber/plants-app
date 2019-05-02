@@ -5,13 +5,13 @@ import Colors from '../constants/Colors';
 export default class PlantListCard extends React.Component {
     render() {
         const {
-            item: {name, botanicalName, thumb},
+            item: {name, botanicalName, imageURI},
         } = this.props;
 
         return (
             <View style={styles.container}>
                 <View style={styles.imageContainer}>
-                    <Image url={thumb} />
+                    <Image source={{uri: imageURI}} style={styles.image} />
                 </View>
                 <View>
                     <Text numberOfLines={1} style={styles.titleText}>
@@ -46,6 +46,12 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.imagePlaceholder,
         marginRight: 16,
         borderRadius: 30,
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 30,
+        overflow: 'hidden',
     },
     titleText: {
         fontFamily: 'firaSans-Bold',

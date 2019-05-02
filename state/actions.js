@@ -33,8 +33,9 @@ export const fetchPlantsDictionary = () => {
         }
 
         dispatch(loadPlantsDictionary());
+        let url = globalConfig.API_URL + '/plants';
 
-        return fetch(globalConfig.API_URL + '/plants', {
+        return fetch(url, {
             headers: {
                 Accept: 'application/json',
             },
@@ -42,7 +43,8 @@ export const fetchPlantsDictionary = () => {
         })
             .then((response) => response.json())
             .catch((error) => {
-                console.error(error.message);
+                // console.error(error.message);
+                alert(error.message);
                 dispatch(loadPlantsDictionaryFailure(error));
             })
             .then((recipes) => dispatch(loadPlantsDictionarySuccess(recipes)));
