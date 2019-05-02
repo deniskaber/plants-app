@@ -3,7 +3,7 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {AppLoading, Asset, Font, Icon} from 'expo';
-import {fetchPlantsDictionary} from './state/actions';
+import {fetchPlantsDictionary, fetchPopularPlants} from './state/actions';
 import AppNavigator from './navigation/AppNavigator';
 import configureStore from './state/configureStore';
 
@@ -38,7 +38,10 @@ export default class App extends React.Component {
     }
 
     _loadResourcesAsync = async () => {
-        const loadDataPromise = store.dispatch(fetchPlantsDictionary());
+        const loadDataPromise = Promise.all([
+            store.dispatch(fetchPlantsDictionary()),
+            store.dispatch(fetchPopularPlants()),
+        ]);
 
         return Promise.all([
             Asset.loadAsync([require('./assets/images/robot-dev.png'), require('./assets/images/robot-prod.png')]),

@@ -1,7 +1,7 @@
-import {Icon} from 'expo';
 import React from 'react';
-import {FlatList, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
+import AddButton from '../components/AddButton';
 import PlantListCard from '../components/PlantListCard';
 
 class UserPlantsListScreen extends React.Component {
@@ -27,13 +27,7 @@ class UserPlantsListScreen extends React.Component {
                 >
                     Ваши растения
                 </Text>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('AddPlant')}>
-                    <Icon.Ionicons
-                        name={'md-add'}
-                        size={36}
-                        // style={{marginBottom: -3}}
-                    />
-                </TouchableOpacity>
+                <AddButton onPress={() => this.props.navigation.navigate('AddPlant')} />
             </View>
         );
     };

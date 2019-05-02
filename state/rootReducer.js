@@ -2,6 +2,7 @@ import {PLANTS_DICTIONARY_ACTIONS, USER_PLANTS_ACTIONS} from './actions';
 
 const initialState = {
     plants: [],
+    popularPlants: [],
     usersPlants: [],
 };
 
@@ -26,6 +27,13 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
+            };
+        }
+
+        case PLANTS_DICTIONARY_ACTIONS.LOAD_POPULAR_PLANTS_DICTIONARY: {
+            return {
+                ...state,
+                popularPlants: action.payload,
             };
         }
 

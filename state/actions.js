@@ -1,9 +1,11 @@
+import {makeServerRequest} from '../helpers';
 import globalConfig from './globalConfig';
 
 export const PLANTS_DICTIONARY_ACTIONS = {
     LOAD_PLANTS_DICTIONARY: 'LOAD_PLANTS_DICTIONARY',
     LOAD_PLANTS_DICTIONARY_SUCCESS: 'LOAD_PLANTS_DICTIONARY_SUCCESS',
     LOAD_PLANTS_DICTIONARY_FAILURE: 'LOAD_PLANTS_DICTIONARY_FAILURE',
+    LOAD_POPULAR_PLANTS_DICTIONARY: 'LOAD_POPULAR_PLANTS_DICTIONARY',
 };
 
 export const USER_PLANTS_ACTIONS = {
@@ -16,9 +18,9 @@ const loadPlantsDictionary = () => ({
     type: PLANTS_DICTIONARY_ACTIONS.LOAD_PLANTS_DICTIONARY,
 });
 
-const loadPlantsDictionarySuccess = (recipes) => ({
+const loadPlantsDictionarySuccess = (plants) => ({
     type: PLANTS_DICTIONARY_ACTIONS.LOAD_PLANTS_DICTIONARY_SUCCESS,
-    payload: recipes,
+    payload: plants,
 });
 
 const loadPlantsDictionaryFailure = (error) => ({
@@ -26,28 +28,34 @@ const loadPlantsDictionaryFailure = (error) => ({
     payload: error,
 });
 
+const loadPopularPlantsDictionary = (plants) => ({
+    type: PLANTS_DICTIONARY_ACTIONS.LOAD_POPULAR_PLANTS_DICTIONARY,
+    payload: plants,
+});
+
 export const fetchPlantsDictionary = () => {
     return (dispatch, getState) => {
-        if (getState().plants.length > 0) {
-            return;
-        }
+        // if (getState().plants.length > 0) {
+        //     return;
+        // }
 
         dispatch(loadPlantsDictionary());
-        let url = globalConfig.API_URL + '/plants';
+        const url = globalConfig.API_URL + '/plants';
 
-        return fetch(url, {
-            headers: {
-                Accept: 'application/json',
-            },
-            mode: 'cors',
-        })
-            .then((response) => response.json())
+        return makeServerRequest(url)
             .catch((error) => {
-                // console.error(error.message);
                 alert(error.message);
                 dispatch(loadPlantsDictionaryFailure(error));
             })
-            .then((recipes) => dispatch(loadPlantsDictionarySuccess(recipes)));
+            .then((plants) => dispatch(loadPlantsDictionarySuccess(plants)));
+    };
+};
+
+export const fetchPopularPlants = () => {
+    return (dispatch, getState) => {
+        const url = globalConfig.API_URL + '/plants/popular';
+
+        return makeServerRequest(url).then((plants) => dispatch(loadPopularPlantsDictionary(plants)));
     };
 };
 

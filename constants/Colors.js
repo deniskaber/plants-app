@@ -20,8 +20,12 @@ export default {
     errorBackground: dangerColor,
     errorText: '#fff',
     textColor: blackColor,
+    captionTextColor: greyColor,
+    highlightedTextColor: '#fed257',
     warningBackground: '#EAEB5E',
     warningText: '#666804',
     noticeBackground: tintColor,
     noticeText: '#fff',
+    fieldBackgroundColor: '#f1f1f2',
+    fieldTextColor: '#8e8e93',
 };
