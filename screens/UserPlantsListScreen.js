@@ -17,6 +17,8 @@ class UserPlantsListScreen extends React.Component {
     };
 
     renderListHeader = () => {
+        const {usersPlants, navigation} = this.props;
+
         return (
             <View style={styles.headerContainer}>
                 <Text
@@ -27,7 +29,7 @@ class UserPlantsListScreen extends React.Component {
                 >
                     Ваши растения
                 </Text>
-                <AddButton onPress={() => this.props.navigation.navigate('AddPlant')} />
+                <AddButton isAccented={!usersPlants.length} onPress={() => navigation.navigate('AddPlant')} />
             </View>
         );
     };
@@ -43,16 +45,15 @@ class UserPlantsListScreen extends React.Component {
     renderListEmpty = () => {
         return (
             <View>
-                <Text>Пока ничего нет</Text>
+                <Text>Добавьте ваше первое растение!</Text>
             </View>
         );
     };
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.cardContainer}>
                 <FlatList
-                    style={styles.list}
                     data={this.props.usersPlants}
                     keyExtractor={(item, index) => item.id}
                     ListHeaderComponent={this.renderListHeader}
@@ -65,19 +66,17 @@ class UserPlantsListScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    cardContainer: {
         flex: 1,
         backgroundColor: '#fff',
+        paddingHorizontal: 16,
     },
     headerContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginHorizontal: 8,
-    },
-    list: {
-        paddingHorizontal: 8,
+        marginBottom: 24,
     },
 });
 

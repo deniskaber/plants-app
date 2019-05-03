@@ -1,6 +1,7 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {ImageBackground, StyleSheet, Text, View} from 'react-native';
 import Colors from '../constants/Colors';
+import Layout from '../constants/Layout';
 
 export default class PlantListCard extends React.Component {
     render() {
@@ -9,36 +10,36 @@ export default class PlantListCard extends React.Component {
         } = this.props;
 
         return (
-            <View style={styles.container}>
-                <View style={styles.imageContainer}>
-                    <Image source={{uri: imageURI}} style={styles.image} />
-                </View>
-                <View>
-                    <Text numberOfLines={1} style={styles.titleText}>
-                        {name}
-                    </Text>
-                    <Text numberOfLines={1} style={styles.secondaryText}>
-                        {botanicalName}
-                    </Text>
-                </View>
+            <View style={styles.cardContainer}>
+                <ImageBackground source={{uri: imageURI}} style={styles.image}>
+                    <View/>
+                    <View style={styles.contentContainer}>
+                        <View>
+                            <Text numberOfLines={1} style={styles.titleText}>
+                                {name}
+                            </Text>
+                            <Text numberOfLines={1} style={styles.secondaryText}>
+                                {botanicalName}
+                            </Text>
+                        </View>
+                    </View>
+                </ImageBackground>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor: Colors.mainColor,
+    cardContainer: {
+        backgroundColor: Colors.greyColor,
         borderRadius: 12,
-        height: 88,
-        padding: 14,
+        height: 108,
         marginVertical: 8,
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 3},
-        shadowOpacity: 0.08,
-        shadowRadius: 8,
+        overflow: 'hidden',
+    },
+    contentContainer: {
+        paddingVertical: 32,
+        paddingHorizontal: 22,
     },
     imageContainer: {
         width: 60,
@@ -50,19 +51,18 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%',
-        borderRadius: 30,
-        overflow: 'hidden',
     },
     titleText: {
         fontFamily: 'firaSans-Bold',
         fontSize: 18,
         lineHeight: 24,
         fontWeight: 'bold',
+        color: Colors.mainColor,
     },
     secondaryText: {
         fontFamily: 'firaSans-Light',
         fontSize: 14,
         lineHeight: 20,
-        color: Colors.greyColor,
+        color: Colors.mainColor,
     },
 });
