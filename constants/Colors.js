@@ -4,6 +4,7 @@ const accentColor = '#fe005f';
 const blackColor = '#000';
 const greyColor = '#999';
 const dangerColor = 'red';
+const lightGreyColor = '#ebebeb';
 
 export default {
     tintColor,
@@ -12,6 +13,7 @@ export default {
     blackColor,
     greyColor,
     dangerColor,
+    lightGreyColor,
     cardBackground: mainColor,
     tabIconDefault: '#999',
     tabIconSelected: accentColor,

@@ -1,10 +1,12 @@
+import {AppLoading, Asset, Font, Icon, Localization} from 'expo';
+import * as moment from 'moment';
+require('moment/locale/ru.js');
 import React from 'react';
+import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
-import {Platform, StatusBar, StyleSheet, View} from 'react-native';
-import {AppLoading, Asset, Font, Icon} from 'expo';
-import {fetchPlantsDictionary, fetchPopularPlants} from './state/actions';
 import AppNavigator from './navigation/AppNavigator';
+import {fetchPlantsDictionary, fetchPopularPlants} from './state/actions';
 import configureStore from './state/configureStore';
 
 const {store, persistor} = configureStore();
@@ -13,6 +15,12 @@ export default class App extends React.Component {
     state = {
         isLoadingComplete: false,
     };
+
+    constructor(props) {
+        super(props);
+
+        moment.locale('ru');
+    }
 
     render() {
         if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -52,7 +60,7 @@ export default class App extends React.Component {
                 // to remove this if you are not using it in your app
                 'firaSans-Bold': require('./assets/fonts/FiraSans-Bold.ttf'),
                 'firaSans-Light': require('./assets/fonts/FiraSans-Light.ttf'),
-                'firaSans-Regular': require('./assets/fonts/FiraSans-Regular.ttf'),
+                firaSans: require('./assets/fonts/FiraSans-Regular.ttf'),
             }),
             loadDataPromise,
         ]);

@@ -1,7 +1,9 @@
 import React from 'react';
 import {Button, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { LinearGradient } from 'expo';
 import {connect} from 'react-redux';
 import PlatformIcon from '../components/PlatformIcon';
+import {ScreenSubtitleText, ScreenTitleText} from '../components/StyledText';
 import Colors from '../constants/Colors';
 
 class PlantDetailsScreen extends React.Component {
@@ -9,8 +11,9 @@ class PlantDetailsScreen extends React.Component {
         tabBarVisible: false,
         headerTintColor: Colors.textColor,
         headerStyle: {
-            borderBottomWidth: 0,
+            borderBottomWidth: 0
         },
+        headerTransparent: true,
         headerRight: (
             <TouchableOpacity onPress={navigation.getParam('handleActionEdit')}>
                 <PlatformIcon name="settings" style={styles.headerRightIcon} />
@@ -23,28 +26,40 @@ class PlantDetailsScreen extends React.Component {
     }
 
     _handleActionEdit = () => {
-        this.props.navigation.navigate('PlantAdditionalDetails', {id: this.props.plant.id});
+        this.props.navigation.push('PlantAdditionalDetails', {id: this.props.plant.id});
     };
 
     handlePressSetNotificationsButton = () => {
-        this.props.navigation.navigate('PlantWateringSettings', {id: this.props.plant.id});
+        this.props.navigation.push('PlantWateringSettings', {id: this.props.plant.id});
     }
 
     render() {
         const {plant} = this.props;
 
         if (!plant) {
-            this.props.navigation.navigate('Home');
+            this.props.navigation.goBack('Home');
 
             return null;
         }
 
         return (
-            <ImageBackground source={{uri: plant.imageURI}} style={{width: '100%', height: '100%'}}>
-                <ScrollView style={styles.container}>
+            <ImageBackground source={{uri: plant.imageURI}} style={styles.container}>
+                <ScrollView>
+                    {/*<LinearGradient*/}
+                        {/*colors={['transparent', 'rgba(0,0,0,0.5)']}*/}
+                        {/*style={{*/}
+                            {/*position: 'absolute',*/}
+                            {/*marginLeft: -16,*/}
+                            {/*marginRight: -16,*/}
+                            {/*left: -16,*/}
+                            {/*right: -16,*/}
+                            {/*top: 0,*/}
+                            {/*height: '100%',*/}
+                        {/*}}*/}
+                    {/*/>*/}
                     <View style={styles.titleContainer}>
-                        <Text style={styles.titleText}>{plant.name}</Text>
-                        <Text>{plant.botanicalName}</Text>
+                        <ScreenTitleText>{plant.name}</ScreenTitleText>
+                        <ScreenSubtitleText>{plant.botanicalName}</ScreenSubtitleText>
                     </View>
 
                     <View style={styles.scheduleCardContainer}>
@@ -104,20 +119,9 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     titleContainer: {
+        marginTop: 425,
         color: Colors.mainColor,
         paddingHorizontal: 8,
-    },
-    titleText: {
-        fontFamily: 'firaSans-Bold',
-        fontSize: 26,
-        lineHeight: 34,
-        color: Colors.mainColor,
-    },
-    subtitleText: {
-        fontFamily: 'firaSans-Regular',
-        fontSize: 14,
-        lineHeight: 20,
-        color: Colors.mainColor,
     },
     scheduleCardContainer: {
         marginVertical: 8,

@@ -10,6 +10,12 @@ import Colors from '../constants/Colors';
 const ITEM_HEIGHT = 76;
 
 class PlantsDictionaryScreen extends React.PureComponent {
+    static navigationOptions = {
+        headerStyle: {
+            borderBottomWidth: 0,
+        },
+    };
+
     state = {
         plantNameFilter: '',
     };
@@ -56,7 +62,7 @@ class PlantsDictionaryScreen extends React.PureComponent {
                     onChangeText={this.handleChangeSearch}
                     onClear={this.handleClearSearch}
                 />
-                {!plantNameFilter && <SubheaderCaptionText style={styles.captionText}>Популярные</SubheaderCaptionText>}
+                {!plantNameFilter && <SubheaderCaptionText>Популярные</SubheaderCaptionText>}
             </View>
         );
     };
@@ -79,7 +85,7 @@ class PlantsDictionaryScreen extends React.PureComponent {
 
     render() {
         return (
-            <ScreenViewContainer style={styles.container}>
+            <ScreenViewContainer>
                 <FlatList
                     data={this.state.data || this.props.popularPlants}
                     keyExtractor={this.listKeyExtractor}
@@ -94,15 +100,14 @@ class PlantsDictionaryScreen extends React.PureComponent {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 16,
-    },
     searchFieldContainer: {
         backgroundColor: Colors.mainColor,
         borderWidth: 0,
         borderTopWidth: 0,
         borderBottomWidth: 0,
         padding: 0,
+        marginLeft: -8,
+        marginRight: -8,
     },
     searchField: {
         height: 36,
@@ -110,9 +115,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.fieldBackgroundColor,
         color: Colors.fieldTextColor,
         marginVertical: 24,
-    },
-    captionText: {
-        marginBottom: 8,
     },
 });
 

@@ -47,12 +47,12 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.imagePlaceholder,
         marginRight: 16,
         borderRadius: 30,
+        position: 'relative',
+        overflow: 'hidden',
     },
     image: {
         width: '100%',
         height: '100%',
-        borderRadius: 30,
-        overflow: 'hidden',
     },
     titleText: {
         fontFamily: 'firaSans-Bold',

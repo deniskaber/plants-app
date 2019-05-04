@@ -12,5 +12,6 @@ const styles = StyleSheet.create({
     screenViewContainer: {
         flex: 1,
         backgroundColor: Colors.mainColor,
+        paddingHorizontal: 16,
     },
 });

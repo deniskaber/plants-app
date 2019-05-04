@@ -8,6 +8,12 @@ export class ScreenTitleText extends React.Component {
     }
 }
 
+export class ScreenSubtitleText extends React.Component {
+    render() {
+        return <Text {...this.props} style={[styles.subtitleText, this.props.style]} />;
+    }
+}
+
 export class SubheaderCaptionText extends React.Component {
     render() {
         return <Text {...this.props} style={[styles.subheaderText, this.props.style]} />;
@@ -21,10 +27,17 @@ export const styles = StyleSheet.create({
         lineHeight: 34,
         color: Colors.textColor,
     },
+    subtitleText: {
+        fontFamily: 'firaSans-Light',
+        fontSize: 14,
+        lineHeight: 20,
+        color: Colors.textColor,
+    },
     subheaderText: {
         fontFamily: 'firaSans-Bold',
         fontSize: 14,
         lineHeight: 18,
         color: Colors.captionTextColor,
+        marginBottom: 4,
     },
 });

@@ -3,8 +3,8 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Colors from '../constants/Colors';
 import AddIcon from './icons/AddIcon';
 
-const AddButton = ({isAccented, onPress}) => (
-    <TouchableOpacity onPress={onPress}>
+const AddButton = ({viewStyle, isAccented, onPress}) => (
+    <TouchableOpacity onPress={onPress} style={viewStyle}>
         <View style={[styles.wrapper, isAccented && styles.wrapperAccent]}>
             <AddIcon
                 fill={isAccented ? Colors.mainColor : Colors.tintColor}

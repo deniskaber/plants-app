@@ -71,6 +71,8 @@ class PlantAdditionalDetailsScreen extends React.Component {
             ]);
         });
 
+        this.props.navigation.navigate('Home');
+
         this.props.deleteUserPlant(this.props.plant.id);
     };
 
@@ -87,6 +89,10 @@ class PlantAdditionalDetailsScreen extends React.Component {
     }
 
     render() {
+        if (!this.props.plant) {
+            return null;
+        }
+
         return (
             <ScreenViewContainer>
                 <ScreenTitleText>Дополнительная инфа</ScreenTitleText>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Text, View} from 'react-native';
 import {connect} from 'react-redux';
-import RecurrencePicker from '../components/RecurrencePicker';
+import RecurrencePickerOld from '../components/RecurrencePickerOld';
 import {ScreenViewContainer} from '../components/ScreenView';
 import {ScreenTitleText} from '../components/StyledText';
 import {editUserPlant} from '../state/actions';
@@ -42,7 +42,7 @@ class PlantWateringSettingsScreen extends React.Component {
             <ScreenViewContainer>
                 <ScreenTitleText>График полива</ScreenTitleText>
                 <View>
-                    <RecurrencePicker value={this.state.recurrence} onChange={this.handleChangeRecurrence} />
+                    <RecurrencePickerOld value={this.state.recurrence} onChange={this.handleChangeRecurrence} />
                 </View>
                 <Button title="Сохранить" onPress={this.handlePressSaveButton} />
             </ScreenViewContainer>

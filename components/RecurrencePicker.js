@@ -1,53 +1,47 @@
-import {times} from 'lodash';
-import PropTypes from 'prop-types';
+import moment from 'moment';
+import {Picker, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {Picker, StyleSheet, Text, View} from 'react-native';
 import {RRule} from 'rrule';
+import {times} from 'lodash';
+import Colors from '../constants/Colors';
 
-export default class RecurrencePicker extends React.Component {
-    static propTypes = {
-        value: PropTypes.shape({
-            freq: PropTypes.string,
-            interval: PropTypes.number,
-        }),
-        onChange: PropTypes.func,
+const frequencyMap = {
+    0: 'year',
+    1: 'month',
+    2: 'week',
+    3: 'day',
+};
+
+export class RecurrencePicker extends React.Component {
+    state = {
+        showPicker: false,
     };
 
-    state;
+    onPress = () => {
+        this.setState((state) => ({
+            showPicker: !state.showPicker,
+        }));
+    };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            ...(props.value
-                ? props.value
-                : {
-                      freq: RRule.DAILY,
-                      interval: 1,
-                  }),
-        };
+    formatValue(value) {
+        return moment
+            .duration(value.interval, frequencyMap[value.freq])
+            .locale('ru')
+            .humanize();
     }
 
     handleChangeFrequency = (freq) => {
-        this.setState(
-            {
-                freq,
-            },
-            () => {
-                this.props.onChange(this.state);
-            },
-        );
+        this.props.onValueChange({
+            interval: this.props.value.interval,
+            freq,
+        });
     };
 
     handleChangeInterval = (interval) => {
-        this.setState(
-            {
-                interval,
-            },
-            () => {
-                this.props.onChange(this.state);
-            },
-        );
+        this.props.onValueChange({
+            interval,
+            freq: this.props.value.freq,
+        });
     };
 
     renderPickerOption = (index) => {
@@ -56,43 +50,77 @@ export default class RecurrencePicker extends React.Component {
         return <Picker.Item key={dayNumber} label={String(dayNumber)} value={dayNumber} />;
     };
 
-    render() {
-        const {freq, interval} = this.state;
+    renderPicker = () => {
+        if (!this.state.showPicker) {
+            return null;
+        }
 
-        const rule = new RRule(this.state);
+        const {value} = this.props;
+        const {freq, interval} = value;
+
+        return (
+            <View style={styles.pickerContainer}>
+                <Picker
+                    selectedValue={interval}
+                    style={styles.intervalPicker}
+                    onValueChange={this.handleChangeInterval}
+                >
+                    {times(30, (item) => this.renderPickerOption(item))}
+                </Picker>
+                <Picker selectedValue={freq} style={styles.frequencyPicker} onValueChange={this.handleChangeFrequency}>
+                    <Picker.Item label="день" value={RRule.DAILY} />
+                    <Picker.Item label="неделю" value={RRule.WEEKLY} />
+                    <Picker.Item label="месяц" value={RRule.MONTHLY} />
+                    <Picker.Item label="год" value={RRule.YEARLY} />
+                </Picker>
+            </View>
+        );
+    };
+
+    render() {
+        const {label, value, recommendedValue} = this.props;
 
         return (
             <View>
-                <View style={styles.container}>
-                    <Text>Поливать каждые</Text>
-                    <Picker
-                        selectedValue={interval}
-                        style={styles.intervalPicker}
-                        onValueChange={this.handleChangeInterval}
-                    >
-                        {times(30, (item) => this.renderPickerOption(item))}
-                    </Picker>
-                    <Picker
-                        selectedValue={freq}
-                        style={styles.frequencyPicker}
-                        onValueChange={this.handleChangeFrequency}
-                    >
-                        <Picker.Item label="день" value={RRule.DAILY} />
-                        <Picker.Item label="неделю" value={RRule.WEEKLY} />
-                        <Picker.Item label="месяц" value={RRule.MONTHLY} />
-                        <Picker.Item label="год" value={RRule.YEARLY} />
-                    </Picker>
-                </View>
-                <View>
-                    <Text>{rule.toString()}</Text>
-                </View>
+                <TouchableOpacity style={styles.inputContainer} onPress={this.onPress}>
+                    <Text style={styles.labelText}>{label}</Text>
+                    <Text style={[styles.labelText, styles.accentedLabelText]}>{this.formatValue(value)}</Text>
+                </TouchableOpacity>
+                <Text style={styles.captionText}>
+                    Рекомендованное значение - раз в {this.formatValue(recommendedValue)}
+                </Text>
+                {this.renderPicker()}
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
+    inputContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 8,
+        paddingVertical: 16,
+        borderBottomWidth: 2,
+        borderColor: Colors.lightGreyColor,
+    },
+    labelText: {
+        fontFamily: 'firaSans',
+        fontSize: 18,
+        lineHeight: 24,
+        color: Colors.textColor,
+    },
+    captionText: {
+        textAlign: 'right',
+        fontFamily: 'firaSans',
+        fontSize: 14,
+        lineHeight: 20,
+        color: Colors.greyColor,
+    },
+    accentedLabelText: {
+        color: Colors.tintColor,
+    },
+    pickerContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

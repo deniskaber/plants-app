@@ -3,17 +3,17 @@ import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import AddButton from '../components/AddButton';
 import PlantListCard from '../components/PlantListCard';
+import {ScreenViewContainer} from '../components/ScreenView';
 
 class UserPlantsListScreen extends React.Component {
     static navigationOptions = {
-        headerBackTitle: null,
         headerStyle: {
             borderBottomWidth: 0,
         },
     };
 
     _onPress = ({id}) => {
-        this.props.navigation.navigate('PlantDetails', {id});
+        this.props.navigation.push('PlantDetails', {id});
     };
 
     renderListHeader = () => {
@@ -52,7 +52,7 @@ class UserPlantsListScreen extends React.Component {
 
     render() {
         return (
-            <View style={styles.cardContainer}>
+            <ScreenViewContainer>
                 <FlatList
                     data={this.props.usersPlants}
                     keyExtractor={(item, index) => item.id}
@@ -60,17 +60,12 @@ class UserPlantsListScreen extends React.Component {
                     ListEmptyComponent={this.renderListEmpty}
                     renderItem={({item}) => this.renderItem(item)}
                 />
-            </View>
+            </ScreenViewContainer>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    cardContainer: {
-        flex: 1,
-        backgroundColor: '#fff',
-        paddingHorizontal: 16,
-    },
     headerContainer: {
         flex: 1,
         flexDirection: 'row',

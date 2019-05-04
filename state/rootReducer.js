@@ -18,7 +18,10 @@ const rootReducer = (state = initialState, action) => {
         case PLANTS_DICTIONARY_ACTIONS.LOAD_PLANTS_DICTIONARY_SUCCESS: {
             return {
                 ...state,
-                plants: action.payload,
+                plants: action.payload.map((plant) => ({
+                    ...plant,
+                    imageURI: 'http://localhost:8080/static/images/test_image.jpg',
+                })),
                 isLoading: false,
             };
         }
@@ -33,7 +36,10 @@ const rootReducer = (state = initialState, action) => {
         case PLANTS_DICTIONARY_ACTIONS.LOAD_POPULAR_PLANTS_DICTIONARY: {
             return {
                 ...state,
-                popularPlants: action.payload,
+                popularPlants: action.payload.map((plant) => ({
+                    ...plant,
+                    imageURI: 'http://localhost:8080/static/images/test_image.jpg',
+                })),
             };
         }
 
