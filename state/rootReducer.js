@@ -1,3 +1,4 @@
+import {keyBy} from 'lodash';
 import {PLANTS_DICTIONARY_ACTIONS, USER_PLANTS_ACTIONS} from './actions';
 
 const initialState = {
@@ -43,6 +44,17 @@ const rootReducer = (state = initialState, action) => {
             };
         }
 
+        case PLANTS_DICTIONARY_ACTIONS.LOAD_ATTRIBUTES_DICTIONARIES: {
+            return {
+                ...state,
+                light: keyBy(action.payload.light, 'id'),
+                temperature: keyBy(action.payload.temperature, 'id'),
+                humidity: keyBy(action.payload.humidity, 'id'),
+                watering: keyBy(action.payload.watering, 'id'),
+                soil: keyBy(action.payload.soil, 'id'),
+            };
+        }
+
         case USER_PLANTS_ACTIONS.ADD_PLANT: {
             return {
                 ...state,
@@ -52,12 +64,22 @@ const rootReducer = (state = initialState, action) => {
 
         case USER_PLANTS_ACTIONS.EDIT_PLANT: {
             const {id: plantId, updatedDetails} = action.payload;
-            const updatedPlant = state.usersPlants.find(({id}) => id === plantId);
-            const usersPlants = state.usersPlants.filter(({id}) => id !== plantId);
+            const {usersPlants} = state;
+            const updatedPlantIndex = usersPlants.findIndex(({id}) => id === plantId);
+            const updatedPlant = usersPlants[updatedPlantIndex];
+
+            if (updatedPlantIndex < 0) {
+                console.error('Tried to update non existed plant');
+                return state;
+            }
 
             return {
                 ...state,
-                usersPlants: [...usersPlants, {...updatedPlant, ...updatedDetails}],
+                usersPlants: [
+                    ...usersPlants.slice(0, updatedPlantIndex),
+                    {...updatedPlant, ...updatedDetails},
+                    ...usersPlants.slice(updatedPlantIndex + 1),
+                ],
             };
         }
 

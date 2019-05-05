@@ -6,7 +6,7 @@ import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import AppNavigator from './navigation/AppNavigator';
-import {fetchPlantsDictionary, fetchPopularPlants} from './state/actions';
+import {fetchAttributesDictionaries, fetchPlantsDictionary, fetchPopularPlants} from './state/actions';
 import configureStore from './state/configureStore';
 
 const {store, persistor} = configureStore();
@@ -49,6 +49,7 @@ export default class App extends React.Component {
         const loadDataPromise = Promise.all([
             store.dispatch(fetchPlantsDictionary()),
             store.dispatch(fetchPopularPlants()),
+            store.dispatch(fetchAttributesDictionaries()),
         ]);
 
         return Promise.all([

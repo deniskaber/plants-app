@@ -10,6 +10,7 @@ import PlantsDictionaryScreen from '../screens/PlantsDictionaryScreen';
 import AddPlantDetailsScreen from '../screens/AddPlantDetailsScreen';
 import AddPlantWateringScreen from '../screens/AddPlantWateringScreen';
 import AddPlantAdditionalDetailsScreen from '../screens/AddPlantAdditionalDetailsScreen';
+import PlantSettingsScreen from '../screens/PlantSettingsScreen';
 import PlantWateringSettingsScreen from '../screens/PlantWateringSettingsScreen';
 import UserPlantsListScreen from '../screens/UserPlantsListScreen';
 import LinksScreen from '../screens/LinksScreen';
@@ -19,6 +20,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 const HomeStack = createStackNavigator({
     Home: UserPlantsListScreen,
     PlantDetails: PlantDetailsScreen,
+    PlantSettings: PlantSettingsScreen,
     PlantAdditionalDetails: PlantAdditionalDetailsScreen,
     PlantWateringSettings: PlantWateringSettingsScreen,
     AddPlant: PlantsDictionaryScreen,

@@ -58,7 +58,10 @@ class PlantsDictionaryScreen extends React.PureComponent {
                     value={this.state.plantNameFilter}
                     placeholder="Введите название растения"
                     platform={Platform.OS}
+                    style={styles.searchField}
                     containerStyle={styles.searchFieldContainer}
+                    inputStyle={styles.searchFieldInput}
+                    inputContainerStyle={styles.searchFieldInputContainer}
                     onChangeText={this.handleChangeSearch}
                     onClear={this.handleClearSearch}
                 />
@@ -109,12 +112,12 @@ const styles = StyleSheet.create({
         marginLeft: -8,
         marginRight: -8,
     },
-    searchField: {
-        height: 36,
-        borderRadius: 8,
+    searchFieldInputContainer: {
+        backgroundColor: Colors.fieldBackgroundColor,
+    },
+    searchFieldInput: {
         backgroundColor: Colors.fieldBackgroundColor,
         color: Colors.fieldTextColor,
-        marginVertical: 24,
     },
 });
 

@@ -1,19 +1,18 @@
 import React from 'react';
-import {Button, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import { LinearGradient } from 'expo';
+import {Button, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {LinearGradient} from 'expo';
 import {connect} from 'react-redux';
 import PlatformIcon from '../components/PlatformIcon';
+import {ScreenViewContainer} from '../components/ScreenView';
 import {ScreenSubtitleText, ScreenTitleText} from '../components/StyledText';
 import Colors from '../constants/Colors';
 
 class PlantDetailsScreen extends React.Component {
     static navigationOptions = ({navigation}) => ({
         tabBarVisible: false,
-        headerTintColor: Colors.textColor,
         headerStyle: {
-            borderBottomWidth: 0
+            borderBottomWidth: 0,
         },
-        headerTransparent: true,
         headerRight: (
             <TouchableOpacity onPress={navigation.getParam('handleActionEdit')}>
                 <PlatformIcon name="settings" style={styles.headerRightIcon} />
@@ -26,15 +25,11 @@ class PlantDetailsScreen extends React.Component {
     }
 
     _handleActionEdit = () => {
-        this.props.navigation.push('PlantAdditionalDetails', {id: this.props.plant.id});
+        this.props.navigation.push('PlantSettings', {id: this.props.plant.id});
     };
 
-    handlePressSetNotificationsButton = () => {
-        this.props.navigation.push('PlantWateringSettings', {id: this.props.plant.id});
-    }
-
     render() {
-        const {plant} = this.props;
+        const {plant, light, temperature, humidity, watering, soil} = this.props;
 
         if (!plant) {
             this.props.navigation.goBack('Home');
@@ -43,85 +38,88 @@ class PlantDetailsScreen extends React.Component {
         }
 
         return (
-            <ImageBackground source={{uri: plant.imageURI}} style={styles.container}>
-                <ScrollView>
-                    {/*<LinearGradient*/}
-                        {/*colors={['transparent', 'rgba(0,0,0,0.5)']}*/}
-                        {/*style={{*/}
-                            {/*position: 'absolute',*/}
-                            {/*marginLeft: -16,*/}
-                            {/*marginRight: -16,*/}
-                            {/*left: -16,*/}
-                            {/*right: -16,*/}
-                            {/*top: 0,*/}
-                            {/*height: '100%',*/}
-                        {/*}}*/}
-                    {/*/>*/}
-                    <View style={styles.titleContainer}>
+            <ScreenViewContainer style={styles.container}>
+                <ScrollView style={styles.scrollContainer}>
+                    <View>
                         <ScreenTitleText>{plant.name}</ScreenTitleText>
                         <ScreenSubtitleText>{plant.botanicalName}</ScreenSubtitleText>
                     </View>
-
-                    <View style={styles.scheduleCardContainer}>
-                        <View style={styles.scheduleBlock}>
-                            <View>
-                                <Text style={styles.scheduleCardHeader}>3 дня</Text>
-                                <Text>Полив</Text>
-                            </View>
-                            <View>
-                                <Text style={styles.scheduleCardHeader}>3 недели</Text>
-                                <Text>Удобрение</Text>
-                            </View>
-                            <View>
-                                <Text style={styles.scheduleCardHeader}>Месяц</Text>
-                                <Text>Пересадка</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <Button title="Настроить график полива" onPress={this.handlePressSetNotificationsButton} />
-                        </View>
+                    <View style={styles.imageCard}>
+                        <Image source={{uri: plant.imageURI}} style={styles.image} />
                     </View>
+
+                    {/*<View style={styles.scheduleCardContainer}>*/}
+                    {/*<View style={styles.scheduleBlock}>*/}
+                    {/*<View>*/}
+                    {/*<Text style={styles.scheduleCardHeader}>3 дня</Text>*/}
+                    {/*<Text>Полив</Text>*/}
+                    {/*</View>*/}
+                    {/*<View>*/}
+                    {/*<Text style={styles.scheduleCardHeader}>3 недели</Text>*/}
+                    {/*<Text>Удобрение</Text>*/}
+                    {/*</View>*/}
+                    {/*<View>*/}
+                    {/*<Text style={styles.scheduleCardHeader}>Месяц</Text>*/}
+                    {/*<Text>Пересадка</Text>*/}
+                    {/*</View>*/}
+                    {/*</View>*/}
+                    {/*<View>*/}
+                    {/*<Button title="Настроить график полива" onPress={this.handlePressSetNotificationsButton} />*/}
+                    {/*</View>*/}
+                    {/*</View>*/}
 
                     <View style={styles.cardContainer}>
                         <Text style={styles.cardHeader}>Полив</Text>
-                        <Text>Перед повторным поливом почва должна быть слегка высушенной</Text>
+                        <Text>{watering.description}</Text>
                     </View>
 
                     <View style={styles.cardContainer}>
                         <Text style={styles.cardHeader}>Освещение</Text>
-                        <Text>Супер солнце. Жечь должно как в аду</Text>
+                        <Text>{light.description}</Text>
                     </View>
 
                     <View style={styles.cardContainer}>
                         <Text style={styles.cardHeader}>Температура</Text>
-                        <Text>Любит высокую температуру, не переносит сквозняки. Минимальная температура -13С</Text>
+                        <Text>{temperature.description}</Text>
                     </View>
 
                     <View style={styles.cardContainer}>
                         <Text style={styles.cardHeader}>Влажность</Text>
-                        <Text>Подходит комнатная влажность (не ниже 25%)</Text>
+                        <Text>{humidity.description}</Text>
+                    </View>
+
+                    <View style={[styles.cardContainer, styles.lastCard]}>
+                        <Text style={styles.cardHeader}>Почва</Text>
+                        <Text>{soil.description}</Text>
                     </View>
                 </ScrollView>
-            </ImageBackground>
+            </ScreenViewContainer>
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingHorizontal: 8,
-        fontFamily: 'firaSans-Light',
-        fontSize: 14,
-        lineHeight: 20,
+        paddingHorizontal: 0,
+    },
+    scrollContainer: {
+        paddingHorizontal: 16,
     },
     headerRightIcon: {
         marginRight: 10,
+        color: Colors.tintColor,
     },
-    titleContainer: {
-        marginTop: 425,
-        color: Colors.mainColor,
-        paddingHorizontal: 8,
+    imageCard: {
+        height: 284,
+        marginVertical: 4,
+        borderRadius: 12,
+        overflow: 'hidden',
+        position: 'relative',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: Colors.greyColor,
     },
     scheduleCardContainer: {
         marginVertical: 8,
@@ -140,10 +138,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     cardContainer: {
-        marginVertical: 8,
+        marginVertical: 4,
         backgroundColor: Colors.cardBackground,
         padding: 24,
-        borderRadius: 12,
+        borderRadius: 8,
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 3},
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
     },
     cardHeader: {
         fontFamily: 'firaSans-Bold',
@@ -151,13 +153,29 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         fontWeight: 'bold',
     },
+    lastCard: {
+        marginBottom: 24,
+    },
 });
 
 const mapStateToProps = (state, ownProps) => {
     const plantId = ownProps.navigation.getParam('id');
 
+    const userPlant = state.usersPlants.find(({id}) => id === plantId);
+
+    if (!userPlant) {
+        return {};
+    }
+
+    const plantFromDictionary = state.plants.find(({id}) => id === userPlant.plantId);
+
     return {
-        plant: state.usersPlants.find(({id}) => id === plantId),
+        plant: userPlant,
+        light: state.light[plantFromDictionary.light],
+        temperature: state.temperature[plantFromDictionary.temperature],
+        humidity: state.humidity[plantFromDictionary.humidity],
+        watering: state.watering[plantFromDictionary.watering],
+        soil: state.soil[plantFromDictionary.soil],
     };
 };
 

@@ -36,6 +36,7 @@ class AddPlantAdditionalDetailsScreen extends React.Component {
         addUserPlant({
             ...plantProps,
             name: userDefinedPlantName.trim(),
+            botanicalName: plant.botanicalName,
             imageURI,
             plantId: plant.id,
             id: nanoid(),

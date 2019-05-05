@@ -18,7 +18,7 @@ class AddPlantDetailsScreen extends React.Component {
     };
 
     render() {
-        const {plant} = this.props;
+        const {plant, light, temperature, humidity, watering, soil} = this.props;
 
         return (
             <ScrollView style={styles.container}>
@@ -35,27 +35,27 @@ class AddPlantDetailsScreen extends React.Component {
 
                     <View style={styles.cardContainer}>
                         <Text style={styles.cardHeader}>Полив</Text>
-                        <Text>Перед повторным поливом почва должна быть слегка высушенной</Text>
+                        <Text>{watering.description}</Text>
                     </View>
 
                     <View style={styles.cardContainer}>
                         <Text style={styles.cardHeader}>Освещение</Text>
-                        <Text>Супер солнце. Жечь должно как в аду</Text>
+                        <Text>{light.description}</Text>
                     </View>
 
                     <View style={styles.cardContainer}>
                         <Text style={styles.cardHeader}>Температура</Text>
-                        <Text>Любит высокую температуру, не переносит сквозняки. Минимальная температура -13С</Text>
+                        <Text>{temperature.description}</Text>
                     </View>
 
                     <View style={styles.cardContainer}>
                         <Text style={styles.cardHeader}>Влажность</Text>
-                        <Text>Подходит комнатная влажность (не ниже 25%)</Text>
+                        <Text>{humidity.description}</Text>
                     </View>
 
-                    <View style={styles.cardContainer}>
+                    <View style={[styles.cardContainer, styles.lastCard]}>
                         <Text style={styles.cardHeader}>Почва</Text>
-                        <Text>Грунт для комнатных растений универсальный</Text>
+                        <Text>{soil.description}</Text>
                     </View>
                 </View>
             </ScrollView>
@@ -131,12 +131,22 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 4,
     },
+    lastCard: {
+        marginBottom: 24,
+    },
 });
 
 export default connect((state, ownProps) => {
     const plantId = ownProps.navigation.getParam('id');
 
+    const plant = state.plants.find(({id}) => id === plantId);
+
     return {
-        plant: state.plants.find(({id}) => id === plantId),
+        plant,
+        light: state.light[plant.light],
+        temperature: state.temperature[plant.temperature],
+        humidity: state.humidity[plant.humidity],
+        watering: state.watering[plant.watering],
+        soil: state.soil[plant.soil],
     };
 })(AddPlantDetailsScreen);

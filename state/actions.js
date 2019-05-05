@@ -6,6 +6,7 @@ export const PLANTS_DICTIONARY_ACTIONS = {
     LOAD_PLANTS_DICTIONARY_SUCCESS: 'LOAD_PLANTS_DICTIONARY_SUCCESS',
     LOAD_PLANTS_DICTIONARY_FAILURE: 'LOAD_PLANTS_DICTIONARY_FAILURE',
     LOAD_POPULAR_PLANTS_DICTIONARY: 'LOAD_POPULAR_PLANTS_DICTIONARY',
+    LOAD_ATTRIBUTES_DICTIONARIES: 'LOAD_ATTRIBUTES_DICTIONARIES',
 };
 
 export const USER_PLANTS_ACTIONS = {
@@ -33,6 +34,11 @@ const loadPopularPlantsDictionary = (plants) => ({
     payload: plants,
 });
 
+const loadAttributesDictionaries = (dictionaries) => ({
+    type: PLANTS_DICTIONARY_ACTIONS.LOAD_ATTRIBUTES_DICTIONARIES,
+    payload: dictionaries,
+});
+
 export const fetchPlantsDictionary = () => {
     return (dispatch, getState) => {
         // if (getState().plants.length > 0) {
@@ -56,6 +62,14 @@ export const fetchPopularPlants = () => {
         const url = globalConfig.API_URL + '/plants/popular';
 
         return makeServerRequest(url).then((plants) => dispatch(loadPopularPlantsDictionary(plants)));
+    };
+};
+
+export const fetchAttributesDictionaries = () => {
+    return (dispatch, getState) => {
+        const url = globalConfig.API_URL + '/dictionaries';
+
+        return makeServerRequest(url).then((plants) => dispatch(loadAttributesDictionaries(plants)));
     };
 };
 

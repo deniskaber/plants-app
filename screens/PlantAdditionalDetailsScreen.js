@@ -1,113 +1,123 @@
 import React from 'react';
-import {Alert, Button, Image, TextInput, View} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 import {connect} from 'react-redux';
+import {ImagePicker} from '../components/ImagePicker';
 import {ScreenViewContainer} from '../components/ScreenView';
-import {ScreenTitleText} from '../components/StyledText';
-import Colors from '../constants/Colors';
-import {ImageManager} from '../helpers';
-import {deleteUserPlant, editUserPlant} from '../state/actions';
+import StyledButton from '../components/StyledButton';
+import StyledInput from '../components/StyledInput';
+import {ScreenTitleText, SubheaderCaptionText} from '../components/StyledText';
+import {editUserPlant} from '../state/actions';
 
 class PlantAdditionalDetailsScreen extends React.Component {
+    static navigationOptions = {
+        headerStyle: {
+            borderBottomWidth: 0,
+        },
+    };
+
+    state;
+
     constructor(props) {
         super(props);
 
+        const {plant} = props;
+
         this.state = {
-            userDefinedPlantName: props.plant.name,
+            userDefinedPlantName: plant.name,
+            imageURI: plant.imageURI,
         };
     }
 
-    handleNameSubmit = (nativeEvent) => {
-        const {plant, editUserPlant} = this.props;
-        const {userDefinedPlantName} = this.state;
+    handleSubmit = () => {
+        const {plant, editUserPlant, navigation} = this.props;
+        const {userDefinedPlantName, imageURI} = this.state;
 
         // TODO add plant name validation
 
         editUserPlant(plant.id, {
             name: userDefinedPlantName.trim(),
+            imageURI,
+        });
+
+        navigation.navigate('PlantSettings');
+    };
+
+    handleChangePlantImageURI = (imageURI) => {
+        this.setState({
+            imageURI,
         });
     };
 
     handleChangePlantNameInput = (text) => this.setState({userDefinedPlantName: text});
-
-    _pickImage = async () => {
-        let result;
-
-        try {
-            result = await ImageManager.pickImageFromCameraRoll();
-        } catch (e) {
-            return;
-        }
-
-        const {plant, editUserPlant} = this.props;
-        editUserPlant(plant.id, {
-            imageURI: result.uri,
-        });
-    };
-
-    _takeNewPhoto = async () => {
-        let result;
-
-        try {
-            result = await ImageManager.takePhotoWithCamera();
-        } catch (e) {
-            return;
-        }
-
-        const {plant, editUserPlant} = this.props;
-        editUserPlant(plant.id, {
-            imageURI: result.uri,
-        });
-    };
-
-    handleDeletePlant = async () => {
-        await new Promise((resolve, reject) => {
-            Alert.alert('Удалить это растение', 'Вы уверены?', [
-                {
-                    text: 'Да',
-                    onPress: resolve,
-                    style: 'destructive',
-                },
-                {text: 'Нет', onPress: reject},
-            ]);
-        });
-
-        this.props.navigation.navigate('Home');
-
-        this.props.deleteUserPlant(this.props.plant.id);
-    };
-
-    renderPlantImageControl() {
-        let {plant} = this.props;
-
-        return (
-            <View>
-                {plant.imageURI && <Image source={{uri: plant.imageURI}} style={{width: 200, height: 200}} />}
-                <Button title="Сделать фото" onPress={this._takeNewPhoto} />
-                <Button title="Выбрать из галлереи" onPress={this._pickImage} />
-            </View>
-        );
-    }
 
     render() {
         if (!this.props.plant) {
             return null;
         }
 
+        const {imageURI, userDefinedPlantName} = this.state;
+
         return (
-            <ScreenViewContainer>
-                <ScreenTitleText>Дополнительная инфа</ScreenTitleText>
-                {this.renderPlantImageControl()}
-                <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                    value={this.state.userDefinedPlantName}
-                    onChangeText={this.handleChangePlantNameInput}
-                    onSubmitEditing={this.handleNameSubmit}
-                />
-                <Button title="Удалить растение" color={Colors.dangerColor} onPress={this.handleDeletePlant} />
+            <ScreenViewContainer style={styles.container}>
+                <KeyboardAvoidingView
+                    style={styles.scrollContainer}
+                    contentContainerStyle={styles.scrollContentContainer}
+                    behavior="position"
+                    enabled
+                >
+                    <View style={styles.contentContainerStyle}>
+                        <View>
+                            <ScreenTitleText style={styles.addBottomMargin}>Доп. информация</ScreenTitleText>
+
+                            <View style={styles.addBottomMargin}>
+                                <SubheaderCaptionText>Фото растения</SubheaderCaptionText>
+                                <ImagePicker imageURI={imageURI} onValueChange={this.handleChangePlantImageURI} />
+                            </View>
+
+                            <View>
+                                <SubheaderCaptionText>Название растения</SubheaderCaptionText>
+                                <StyledInput
+                                    value={userDefinedPlantName}
+                                    onValueChange={this.handleChangePlantNameInput}
+                                />
+                            </View>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <StyledButton title="Применить" isAccented onPress={this.handleSubmit} />
+                        </View>
+                    </View>
+                </KeyboardAvoidingView>
             </ScreenViewContainer>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    scrollContainer: {
+        flex: 1,
+    },
+    scrollContentContainer: {
+        flex: 1,
+    },
+    container: {
+        flex: 1,
+        marginBottom: 26,
+    },
+    contentContainerStyle: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+    },
+    addBottomMargin: {
+        marginBottom: 16,
+    },
+    buttonContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+});
 
 const mapStateToProps = (state, ownProps) => {
     const plantId = ownProps.navigation.getParam('id');
@@ -117,7 +127,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = {editUserPlant, deleteUserPlant};
+const mapDispatchToProps = {editUserPlant};
 
 export default connect(
     mapStateToProps,

@@ -35,9 +35,11 @@ class UserPlantsListScreen extends React.Component {
     };
 
     renderItem = (item) => {
+        const plantFromDictionary = this.props.plants.find((plant) => plant.id === item.id)
+
         return (
             <TouchableOpacity key={item.id} onPress={() => this._onPress(item)}>
-                <PlantListCard item={item} />
+                <PlantListCard item={item} plantFromDictionary={plantFromDictionary} />
             </TouchableOpacity>
         );
     };
@@ -77,4 +79,5 @@ const styles = StyleSheet.create({
 
 export default connect((state) => ({
     usersPlants: state.usersPlants,
+    plants: state.plants,
 }))(UserPlantsListScreen);

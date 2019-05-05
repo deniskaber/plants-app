@@ -25,7 +25,7 @@ class AddPlantWateringScreen extends React.Component {
             lastWateringDate: new Date(),
             recurrence: {
                 freq: RRule.DAILY,
-                interval: 3,
+                interval: props.plant.recommendedWateringInterval,
             },
         };
     }
@@ -37,6 +37,7 @@ class AddPlantWateringScreen extends React.Component {
         navigation.navigate('AddPlantAdditionalDetails', {
             id: plant.id,
             plantProps: {
+                recommendedWateringInterval: plant.recommendedWateringInterval,
                 lastWateringDate,
                 recurrence,
             },
@@ -60,8 +61,8 @@ class AddPlantWateringScreen extends React.Component {
         const {lastWateringDate, recurrence} = this.state;
 
         const recommendedValue = {
-            freq: 3,
-            interval: 3,
+            freq: RRule.DAILY,
+            interval: plant.recommendedWateringInterval,
         };
 
         return (
